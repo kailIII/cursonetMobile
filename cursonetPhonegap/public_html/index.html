@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/jquery.mobile.structure.min.css" />
+        <link rel="stylesheet" href="css/cursonet.min.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="cordova-2.3.0.js"></script>
+        <script src="./js/appConfig.js"></script>
+        <script src="js/libs/jquery/jquery.min.js"></script>
+        <script src="js/libs/jquery/jquery.mobile.min.js"></script>
+        <script src="js/libs/delimce/functions.js"></script>
+
+        <script>
+
+            // PhoneGap is ready
+            function onDeviceReady() {
+
+                ///si el usuario ya se logueó
+                if (window.localStorage.getItem("user_id") > 0) {
+                    $(location).attr('href', 'lobi.html');
+                    return false;
+                }
+
+
+                var element = document.getElementById('deviceProperties');
+                var host = document.getElementById('hostname');
+
+                element.innerHTML = 'Equipo: ' + device.name + ', Plataforma: ' + device.platform;
+                host.innerHTML = hostname;
+
+                document.addEventListener("backbutton", exitAppl, false);
+
+                $("#Submit").click(function() {
+
+                    ////para ver si el equipo esta conectado
+                    if (!isOnline())
+                        return false;
+
+
+                    packingCreds('#form1'); ///añadiendo los elementos de seguridad
+                    var formData = $("#form1").serialize();
+
+                    $.ajax({
+                        type: "post",
+                        url: wsdir + "est/login",
+                        dataType: 'json',
+                        cache: false,
+                        data: formData,
+                        success: function(data) {
+                            if (data.id == 0) {
+                                alert("Los datos suministrados son inválidos, vuelva a intentarlo");
+                            } else if (data.id > 0 && data.activo == 0) {
+                                alert("el estudiante con cedula: " + data.id_number + " no esta activo, comuniquese con el docente");
+                            } else { ///puede entrar
+
+                                window.localStorage.clear();
+                                window.localStorage.setItem("user_nombre", data.nombre);
+                                window.localStorage.setItem("user_id", data.id);
+                                window.localStorage.setItem("user_ci", data.id_number);
+                                window.localStorage.setItem("user_email", data.email);
+                                window.localStorage.setItem("user_sexo", data.sexo);
+                                $(location).attr('href', 'lobi.html');
+                            }
+
+                        },
+                        error: function() {
+
+                          offLine();
+
+                        }
+                    });
+
+                    return false;
+                });
+
+            }
+
+        </script>
+
+    </head>
+    <body class="master" onload="init();">
+        <div class="intro">
+            <p>&nbsp;</p>
+        </div>
+        <div>
+
+            <form id="form1">
+                 <div data-role="fieldcontain">
+                <div>Ingrese sus datos de la institución: <span id="hostname"></span></div><br>
+                <label for="usuario">Usuario:</label>
+                <input data-theme="a" data-mini="true" type="text" id="usuario" name="usuario"/>
+                <label for="usuario">Clave:</label>
+                <input data-theme="a" data-mini="true" type="password" id="clave" name="clave"/>
+                <div style="text-align: center" id="deviceProperties"></div>
+                <button id="Submit" data-theme="a" data-inline="true" data-role="submit">Entrar</button>
+                 </div>
+            </form>
+        </div>
+
+    </body>
+</html>

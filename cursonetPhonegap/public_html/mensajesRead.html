@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/jquery.mobile.structure.min.css" />
+        <link rel="stylesheet" href="css/cursonet.min.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="cordova-2.3.0.js"></script>
+        <script src="./js/appConfig.js"></script>
+        <script src="js/libs/jquery/jquery.min.js"></script>
+        <script src="js/libs/jquery/jquery.mobile.min.js"></script>
+        <script src="js/libs/delimce/functions.js"></script>
+        <script>
+            // PhoneGap is ready
+            function onDeviceReady() {
+
+                ////para ver si el equipo esta conectado
+                if (!isOnline())
+                    return false;
+
+
+                var user = window.localStorage.getItem("user_id");
+                var msgId = window.localStorage.getItem("msgId");
+
+                $.ajax({
+                    type: "post",
+                    url: wsdir + "est/mensajeById",
+                    dataType: 'json',
+                    data: {id: user, msgId: msgId},
+                    cache: false,
+                    success: function(data) {
+                        $('#fecha').html(data.fecha);
+                        $('#remite').html(data.remite);
+                        var titulo = (data.titulo == null) ? '[sin titulo]' : data.titulo;
+                        $('#titulo').html(titulo);
+                        $('#texto').html(data.content);
+
+                    },
+                    error: function() {
+
+                        offLine();
+
+                    }
+                });
+
+
+                $("#borra").click(function() {
+
+                    ////para ver si el equipo esta conectado
+                    if (!isOnline())
+                        return false;
+
+                    navigator.notification.confirm(
+                            '¿Desea Eliminar para siempre este mensaje?', // message
+                            borrar, // callback to invoke with index of button pressed
+                            appname, // title
+                            'Ok,cancelar'          // buttonLabels
+                            );
+
+
+                })
+
+
+
+                function borrar(buttonIndex) {
+                    if (buttonIndex == 1) {
+
+                        $.ajax({
+                            type: "post",
+                            url: wsdir + "est/mensajeDelete",
+                            data: {id: user, msgId: msgId},
+                            success: function(data) {
+
+                                isOkResult(data, "ok"); ///a ver si salio bien
+                                $(location).attr('href', 'mensajes.html');
+
+                            },
+                            error: function() {
+
+                                offLine();
+
+                            }
+                        });
+
+                    }
+
+                }
+
+
+
+            }
+
+
+
+
+
+        </script>
+
+    </head>
+    <body class="master" onload="init();">
+
+        <div data-role="page" class="content">
+
+
+            <article style="height: 81%" data-role="content">
+
+                <div data-role="fieldcontain">
+                    <div><b>Fecha: </b><span id="fecha"></span></div>
+                    <div><b>Remitente: </b><span id="remite"></span></div>
+                    <div><b>Titulo: </b><span id="titulo"></span></div>
+                    <br>
+                    <div class="message" id="texto"></div>
+
+                    <a href="index.html" data-theme="a" data-inline="true" data-role="button" data-icon="forward" data-iconpos="right">Responder</a>
+                    <a id="borra" data-theme="a" data-inline="true" data-role="button" data-icon="delete" data-iconpos="right">Borrar</a> 
+
+                </div>
+
+            </article><!-- /content -->
+
+
+
+            <div data-role="footer" data-id="foo1" data-position="fixed" data-tap-toggle="false" class="nav-glyphish-example">
+                <div data-role="navbar" class="nav-glyphish-example">
+                    <ul>
+                        <li><a id="home1" data-ajax="false" data-icon="custom"  href="lobi.html">Inicio</a></li>
+                        <li><a id="user1" data-ajax="false" data-icon="custom" href="micuenta.html">Mi cuenta</a></li>
+                        <li><a id="email" data-ajax="false" data-icon="custom" href="mensajes.html">Mensajes</a></li>
+                        <li><a id="out1"  data-ajax="false" data-icon="custom" onclick="logout();" href="#">Salir</a></li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div><!-- /footer -->
+
+
+        </div><!-- /page -->
+
+    </body>
+</html>

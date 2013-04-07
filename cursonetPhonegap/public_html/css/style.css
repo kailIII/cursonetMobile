@@ -1,0 +1,79 @@
+/* 
+    Document   : style
+    Created on : Mar 6, 2013, 7:05:03 PM
+    Author     : luis
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+body{
+
+    color:#fff;
+    font-family: sans-serif;
+
+
+}
+
+body.master{
+    background-color: #446D8C; 
+}
+
+body.page{
+    background:none;
+}
+
+div{
+    font-size: 12px;
+    padding: 0px 10px
+}
+
+div.intro{
+    background-image:url('images/intro.jpg');
+    background-repeat:no-repeat;
+    border-top: 0px;
+    height: 200px;
+}
+
+div.content{
+    background-image:url('images/content.png');
+    background-repeat:no-repeat;
+    border-top: 0px;
+    height: 100%;
+}
+
+
+label{
+    font-size: 15px;
+    text-shadow: 2px 2px 5px #000;
+    font-weight: bolder;
+}
+
+div.message{
+    border-width: 3px;
+    background-color: #fff;
+    padding: 8px 15px 12px 16px;
+    border-radius: 10px;
+    color: #000;
+    border-style:solid;
+    border-width: 1px;
+    border-color:#000;
+    
+}
+
+div.error {
+    padding: 2px 5px;
+    text-align: right;
+    color: yellow;
+
+}
+
+.nav-glyphish-example .ui-btn .ui-btn-inner { padding-top: 40px !important; }
+.nav-glyphish-example .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: 0 !important; border-radius: 0 !important; }
+#user1 .ui-icon { background:  url(icons/111-user.png) 50% 50% no-repeat; background-size: 28px 26px; }
+#email .ui-icon { background:  url(icons/18-envelope.png) 50% 50% no-repeat; background-size: 28px 20px;  }
+#home1 .ui-icon { background:  url(icons/53-house.png) 50% 50% no-repeat;  background-size: 30px 26px; }
+#out1 .ui-icon { background:  url(icons/102-walk.png) 50% 50% no-repeat;  background-size: 24px 27px; }

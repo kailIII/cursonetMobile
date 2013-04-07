@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/jquery.mobile.structure.min.css" />
+        <link rel="stylesheet" href="css/cursonet.min.css" />
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/jqm-datebox.min.css" />
+        <script src="cordova-2.3.0.js"></script>
+        <script src="./js/appConfig.js"></script>
+        <script src="js/libs/jquery/jquery.min.js"></script>
+        <script src="js/libs/jquery/jquery.mobile.min.js"></script>
+        <script src="js/libs/jquery/jqm-datebox.core.min.js"></script>
+        <script src="js/libs/jquery/jqm-datebox.mode.datebox.min.js"></script>
+        <script src="js/libs/jquery/jquery.validate.min.js"></script>
+        <script src="js/libs/delimce/functions.js"></script>
+        <script>
+            // PhoneGap is ready
+            function onDeviceReady() {
+
+                ////para ver si el equipo esta conectado
+                if (!isOnline())
+                    return false;
+
+
+                var user = window.localStorage.getItem("user_id");
+
+
+                $.ajax({
+                    type: "post",
+                    url: wsdir + "est/cuentaLoad",
+                    dataType: 'json',
+                    data: {id: user},
+                    cache: false,
+                    success: function(data) {
+
+                        $('#r0nombre').val(data.nombre);
+                        $('#r0apellido').val(data.apellido);
+
+                        $("#r0sexo").val(data.sexo);
+                        $("#r0sexo").change();
+
+                        $('#r0fecha_nac').val(data.fecha_nac);
+                        $('#r0telefono_p').val(data.telefono_p);
+                        $('#r0telefono_c').val(data.telefono_c);
+                        $('#r0email').val(data.email);
+                        $('#r0msn').val(data.msn);
+                        $('#r0twitter').val(data.twitter);
+                        $('#r0user').val(data.user);
+                        $('#clave').val(data.pass);
+                        $('#clave2').val(data.pass);
+                        $('#r0clave_preg').val(data.clave_preg);
+                        $('#r0clave_resp').val(data.clave_resp);
+
+                    },
+                    error: function() {
+
+                        offLine();
+
+                    }
+                });
+
+                ///reglas para validar el formulario
+
+                $.validator.addMethod("not_blank_between", function() {
+
+                    var n = $('#r0user').val().split(" ");
+                    if (n.length > 1)
+                        return false;
+                    else
+                        return true;
+
+                }, "El usuario no puede tener espacios en blanco");
+
+                $('#form1').validate({
+                    rules: {
+                        r0nombre: {
+                            required: true
+                        },
+                        r0apellido: {
+                            required: true
+                        },
+                        r0email: {
+                            required: true,
+                            email: true
+                        },
+                        r0telefono_p: {
+                            digits: true
+                        },
+                        r0telefono_c: {
+                            digits: true
+                        },
+                        r0user: {
+                            required: true,
+                            not_blank_between: true
+                        },
+                        clave: {
+                            required: true,
+                            minlength: 4
+                        },
+                        clave2: {
+                            required: true,
+                            minlength: 4,
+                            equalTo: "#clave"
+                        }
+
+                    },
+                    errorElement: "div"
+                });
+
+
+                $("#Submit").click(function() {
+
+                    ////para ver si el equipo esta conectado
+                    if (!isOnline())
+                        return false;
+
+                    //validando
+                    if (!$("#form1").valid())
+                        return false;
+
+                    packingCreds('#form1'); ///añadiendo los elementos de seguridad
+
+                    var ide = window.localStorage.getItem("user_id");
+                    addFieldToForm("ide", ide, "#form1");
+
+                    var formData = $("#form1").serialize();
+
+                    $.ajax({
+                        type: "post",
+                        url: wsdir + "est/cuentaSave",
+                        data: formData,
+                        success: function(data) {
+
+                            window.localStorage.setItem("user_nombre", $('#r0nombre').val() + " " + $('#r0apellido').val());
+                            window.localStorage.setItem("user_email", $('#r0email').val());
+                            window.localStorage.setItem("user_sexo", $('#r0sexo').val());
+                            isOkResult(data, "ok"); ///a ver si salio bien
+
+                        },
+                        error: function() {
+
+                            offLine();
+
+                        }
+                    });
+
+
+                    return false;
+
+                });
+
+
+            }
+
+        </script>
+
+    </head>
+    <body class="master" onload="init();">
+
+        <div data-role="page" class="content">
+
+            <article style="height: 81%" data-role="content">
+
+
+
+                <form data-ajax="false" id="form1">
+
+
+                    <div id="bienvenida"><h2>Datos Personales</h2></div>
+
+
+                    <label for="r0nombre">Nombres:</label>
+                    <input data-theme="a" data-mini="true" type="text" id="r0nombre" name="r0nombre"/>
+                    <label for="r0apellido">Apellidos:</label>
+                    <input data-theme="a" data-mini="true" type="text" id="r0apellido" name="r0apellido"/>
+                    <label for="r0sexo">Sexo</label>
+                    <select data-theme="a"  name="r0sexo" id="r0sexo" data-role="slider">
+                        <option value="F">F</option>
+                        <option value="M">M</option>
+                    </select>
+
+                    <label for="r0fecha_nac">Fecha de nacimiento</label>
+                    <input data-theme="a" name="r0fecha_nac" id="r0fecha_nac" type="date" data-role="datebox"
+                           data-options='{"mode": "datebox","dateFormat":"%d/%m/%Y","calNoHeader": true,"highDates": ["2012-12-07" , "2012-07-12"] }' ></input>
+
+                    <label for="r0telefono_p">Telefono:</label>
+                    <input data-theme="a" data-mini="true" type="number" id="r0telefono_p" name="r0telefono_p"/>
+
+                    <label for="r0telefono_c">Celular:</label>
+                    <input data-theme="a" data-mini="true" type="number" id="r0telefono_c" name="r0telefono_c"/>
+
+
+                    <label for="r0email">Email:</label>
+                    <input data-theme="a" data-mini="true" type="email" id="r0email" name="r0email"/>
+
+                    <label for="r0msn">Msn:</label>
+                    <input data-theme="a" data-mini="true" type="text" id="r0msn" name="r0msn"/>
+
+
+                    <label for="r0twitter">Twitter</label>
+                    <input data-theme="a" data-mini="true" type="text" id="r0twitter" name="r0twitter"/>
+
+
+                    <div id="bienvenida"><h2>Datos de seguridad</h2></div>
+
+                    <label for="r0user">usuario</label>
+                    <input data-theme="a" data-mini="true" type="text" id="r0user" name="r0user"/>
+
+                    <label for="clave">Clave</label>
+                    <input data-theme="a" data-mini="true" type="password" id="clave" name="clave"/>
+
+                    <label for="clave2">Repetir Clave</label>
+                    <input data-theme="a" data-mini="true" type="password" id="clave2" name="clave2"/>
+
+                    <label for="r0clave_preg">Pregunta secreta</label>
+                    <textarea name="r0clave_preg" id="r0clave_preg"> </textarea>
+
+                    <label for="r0clave_resp">Respuesta secreta</label>
+                    <textarea name="r0clave_resp" id="r0clave_resp"> </textarea>
+
+                    <button id="Submit" data-theme="a" data-inline="true">Guardar</button>
+
+                </form>
+
+
+            </article><!-- /content -->
+
+
+            <div data-role="footer" data-id="foo1" data-position="fixed" data-tap-toggle="false" class="nav-glyphish-example">
+                <div data-role="navbar" class="nav-glyphish-example">
+                    <ul>
+                        <li><a id="home1" data-ajax="false" data-icon="custom"  href="lobi.html">Inicio</a></li>
+                        <li><a id="user1" data-ajax="false" data-icon="custom" href="micuenta.html">Mi cuenta</a></li>
+                        <li><a id="email" data-ajax="false" data-icon="custom" href="mensajes.html">Mensajes</a></li>
+                        <li><a id="out1"  data-ajax="false" data-icon="custom" onclick="logout();" href="#">Salir</a></li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div><!-- /footer -->
+
+
+        </div><!-- /page -->
+
+    </body>
+</html>
