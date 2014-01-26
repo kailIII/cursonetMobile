@@ -73,15 +73,15 @@ function packingCreds(formulario) {
 
     $('<input>').attr({
         type: 'hidden',
-        id: 'CODE',
-        name: 'CODE',
+        id: 'code',
+        name: 'code',
         value: hostcode
     }).appendTo(formulario);
 
     $('<input>').attr({
         type: 'hidden',
-        id: 'TOKEN',
-        name: 'TOKEN',
+        id: 'token',
+        name: 'token',
         value: wstoken
     }).appendTo(formulario);
 
@@ -114,6 +114,7 @@ function isOkResult(data, esperado) {
     if (data == esperado) {
         alert("cambios efectuados correctamente");
     } else {
+        vibrate(200);
         alert("lamentablemente el proceso no pudo concluir, por favor intente mas tarde");
         return false;
     }
@@ -128,6 +129,7 @@ function isOnline() {
 
     var conexion = checkConnection();
     if (conexion.value == 0) {
+        vibrate(300);
         alert("No se ha detectado conexion a Internet");
         return false;
     } else {
@@ -141,6 +143,7 @@ function isOnline() {
 function offLine() {
 
     var conexion = checkConnection();
+    vibrate(200);
     alert("Error: no se ha podido tener acceso al servidor usando: " + conexion.message);
 }
 

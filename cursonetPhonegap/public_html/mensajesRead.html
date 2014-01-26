@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="css/jquery.mobile.structure.min.css" />
         <link rel="stylesheet" href="css/cursonet.min.css" />
         <link rel="stylesheet" href="css/style.css" />
-        <script src="cordova-2.3.0.js"></script>
+        <script src="cordova.js"></script>
         <script src="./js/appConfig.js"></script>
         <script src="js/libs/jquery/jquery.min.js"></script>
         <script src="js/libs/jquery/jquery.mobile.min.js"></script>
@@ -27,7 +27,7 @@
                     type: "post",
                     url: wsdir + "est/mensajeById",
                     dataType: 'json',
-                    data: {id: user, msgId: msgId},
+                    data: {id: user, msgId: msgId,code:hostcode,token:wstoken},
                     cache: false,
                     success: function(data) {
                         $('#fecha').html(data.fecha);

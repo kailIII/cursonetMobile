@@ -1,0 +1,8 @@
+[03-Apr-2013 00:01:43] PHP Warning:  require(app/layouts/layoutLogin.php) [<a href='function.require'>function.require</a>]: failed to open stream: No such file or directory in /home/develeme/public_html/cursonetWs/config/avalonMvc_core.php on line 147
+[03-Apr-2013 00:01:43] PHP Warning:  require(app/layouts/layoutLogin.php) [<a href='function.require'>function.require</a>]: failed to open stream: No such file or directory in /home/develeme/public_html/cursonetWs/config/avalonMvc_core.php on line 147
+[03-Apr-2013 00:01:43] PHP Fatal error:  require() [<a href='function.require'>function.require</a>]: Failed opening required 'app/layouts/layoutLogin.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/develeme/public_html/cursonetWs/config/avalonMvc_core.php on line 147
+[13-Apr-2013 10:17:49] PHP Fatal error:  Call to a member function connect() on a non-object in /home/develeme/public_html/cursonetWs/lib/core/Database.php on line 105
+[13-Apr-2013 10:17:58] PHP Fatal error:  Call to a member function connect() on a non-object in /home/develeme/public_html/cursonetWs/lib/core/Database.php on line 105
+[13-Apr-2013 10:18:04] PHP Fatal error:  Call to a member function connect() on a non-object in /home/develeme/public_html/cursonetWs/lib/core/Database.php on line 105
+[13-Apr-2013 10:18:29] PHP Fatal error:  Call to a member function connect() on a non-object in /home/develeme/public_html/cursonetWs/lib/core/Database.php on line 105
+[13-Apr-2013 10:19:36] PHP Fatal error:  Call to a member function connect() on a non-object in /home/develeme/public_html/cursonetWs/lib/core/Database.php on line 105

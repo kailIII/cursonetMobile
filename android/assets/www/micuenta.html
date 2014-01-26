@@ -31,7 +31,7 @@
                     type: "post",
                     url: wsdir + "est/cuentaLoad",
                     dataType: 'json',
-                    data: {id: user},
+                    data: {id: user,code:hostcode,token:wstoken},
                     cache: false,
                     success: function(data) {
 

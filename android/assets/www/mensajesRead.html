@@ -27,7 +27,7 @@
                     type: "post",
                     url: wsdir + "est/mensajeById",
                     dataType: 'json',
-                    data: {id: user, msgId: msgId},
+                    data: {id: user, msgId: msgId,code:hostcode,token:wstoken},
                     cache: false,
                     success: function(data) {
                         $('#fecha').html(data.fecha);
@@ -51,7 +51,7 @@
                     if (!isOnline())
                         return false;
 
-                     navigator.notification.confirm(
+                    navigator.notification.confirm(
                             '¿Desea Eliminar para siempre este mensaje?', // message
                             borrar, // callback to invoke with index of button pressed
                             appname, // title
@@ -64,26 +64,26 @@
 
 
                 function borrar(buttonIndex) {
-                     if (buttonIndex == 1) {
+                    if (buttonIndex == 1) {
 
-                    $.ajax({
-                        type: "post",
-                        url: wsdir + "est/mensajeDelete",
-                        data: {id: user, msgId: msgId},
-                        success: function(data) {
+                        $.ajax({
+                            type: "post",
+                            url: wsdir + "est/mensajeDelete",
+                            data: {id: user, msgId: msgId},
+                            success: function(data) {
 
-                            isOkResult(data, "ok"); ///a ver si salio bien
-                            $(location).attr('href', 'mensajes.html');
+                                isOkResult(data, "ok"); ///a ver si salio bien
+                                $(location).attr('href', 'mensajes.html');
 
-                        },
-                        error: function() {
+                            },
+                            error: function() {
 
-                            offLine();
+                                offLine();
 
-                        }
-                    });
+                            }
+                        });
 
-                      }
+                    }
 
                 }
 
